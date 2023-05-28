@@ -31,9 +31,11 @@ function(req, res, filename) {
   res$body <- ""
 
   if (!is.null(authentication) && authentication ==  api_key) {
-    res$body <- file.exists(paste0(getwd(), "/../data/processed/", filename, ".csv.gz"))
-
-    res$status <- 200
+    if (file.exists(paste0(getwd(), "/../data/processed/", filename, ".csv.gz"))) {
+      res$status <- 200
+    } else {
+      res$status <- 404
+    }
   } else {
     res$status <- 401
   }
@@ -95,10 +97,11 @@ function(req, res, filename) {
   res$body <- ""
 
   if (!is.null(authentication) && authentication ==  api_key) {
-    binary_data <- readBin(con = paste0(getwd(), "/../data/raw/", filename, ".csv.gz"), what = "raw", n = file.info(paste0(getwd(), "/../data/raw/", filename, ".csv.gz"))$size)
-    res$body <- file.exists(paste0(getwd(), "/../data/raw/", filename, ".csv.gz"))
-
-    res$status <- 200
+    if (file.exists(paste0(getwd(), "/../data/processed/", filename, ".csv.gz"))) {
+      res$status <- 200
+    } else {
+      res$status <- 404
+    }
   } else {
     res$status <- 401
   }
