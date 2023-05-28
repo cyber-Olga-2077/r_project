@@ -97,7 +97,7 @@ function(req, res, filename) {
   res$body <- ""
 
   if (!is.null(authentication) && authentication ==  api_key) {
-    if (file.exists(paste0(getwd(), "/../data/processed/", filename, ".csv.gz"))) {
+    if (file.exists(paste0(getwd(), "/../data/raw/", filename, ".csv.gz"))) {
       res$status <- 200
     } else {
       res$status <- 404
