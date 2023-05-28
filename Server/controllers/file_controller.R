@@ -9,8 +9,29 @@ function(req, res, filename) {
   res$body <- ""
 
   if (!is.null(authentication) && authentication ==  api_key) {
-    binary_data <- readBin(con = paste0(getwd(), "/../data/processed/", filename, ".csv.gz"), what = "raw", n = file.info(paste0(getwd(), "/../Data/processed/", filename, ".csv.gz"))$size)
+    binary_data <- readBin(con = paste0(getwd(), "/../data/processed/", filename, ".csv.gz"), what = "raw", n = file.info(paste0(getwd(), "/../data/processed/", filename, ".csv.gz"))$size)
     res$body <- base64_encode(bin = binary_data)
+
+    res$status <- 200
+  } else {
+    res$status <- 401
+  }
+
+  res$body
+}
+
+#* Returns file
+#* @param filename The name of the file to send
+#* @serializer text
+#* parser none
+#* @head /file/raw
+function(req, res, filename) {
+  authentication <- req$HTTP_API_KEY
+
+  res$body <- ""
+
+  if (!is.null(authentication) && authentication ==  api_key) {
+    res$body <- file.exists(paste0(getwd(), "/../data/processed/", filename, ".csv.gz"))
 
     res$status <- 200
   } else {
@@ -52,8 +73,30 @@ function(req, res, filename) {
   res$body <- ""
 
   if (!is.null(authentication) && authentication ==  api_key) {
-    binary_data <- readBin(con = paste0(getwd(), "/../data/raw/", filename, ".csv.gz"), what = "raw", n = file.info(paste0(getwd(), "/../Data/raw/", filename, ".csv.gz"))$size)
+    binary_data <- readBin(con = paste0(getwd(), "/../data/raw/", filename, ".csv.gz"), what = "raw", n = file.info(paste0(getwd(), "/../data/raw/", filename, ".csv.gz"))$size)
     res$body <- base64_encode(bin = binary_data)
+
+    res$status <- 200
+  } else {
+    res$status <- 401
+  }
+
+  res$body
+}
+
+#* Returns file
+#* @param filename The name of the file to send
+#* @serializer text
+#* parser none
+#* @head /file/raw
+function(req, res, filename) {
+  authentication <- req$HTTP_API_KEY
+
+  res$body <- ""
+
+  if (!is.null(authentication) && authentication ==  api_key) {
+    binary_data <- readBin(con = paste0(getwd(), "/../data/raw/", filename, ".csv.gz"), what = "raw", n = file.info(paste0(getwd(), "/../data/raw/", filename, ".csv.gz"))$size)
+    res$body <- file.exists(paste0(getwd(), "/../data/raw/", filename, ".csv.gz"))
 
     res$status <- 200
   } else {
