@@ -7,3 +7,4 @@
 /Server/Data/*
 !/Server/Data/.gitkeep
 .Rhistory
+.env
