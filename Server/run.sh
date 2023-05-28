@@ -1,2 +1,2 @@
 #!/bin/bash
-Rscript server.R
+sudo Rscript server.R
