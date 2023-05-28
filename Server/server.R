@@ -8,7 +8,7 @@ if(!require(openssl)) {
   library(openssl)
 }
 
-setwd("~/r_test/Server")
+setwd("~/r_project/Server")
 
 source("../Common/parse_env.R")
 

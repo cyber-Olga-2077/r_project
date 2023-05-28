@@ -1,7 +1,7 @@
 parse_env <- function () {
   stored_dir <- getwd()
 
-  setwd("~/r_test")
+  setwd("~/r_project")
   env <- readLines(".env") %>% data.frame()
 
   matches <- regmatches(env$., regexpr("=", env$.), invert = TRUE)

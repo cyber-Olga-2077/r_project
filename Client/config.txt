@@ -1,0 +1,6 @@
+URL_remote_raw_GET forecast.olgakrzyczkowska.pl/file/raw
+URL_remote_raw_POST forecast.olgakrzyczkowska.pl/file/raw 
+URL_remote_processed_GET forecast.olgakrzyczkowska.pl/file/processed
+URL_remote_processed_POST forecast.olgakrzyczkowska.pl/file/processed
+URL_ncei_GET https://www.ncei.noaa.gov/pub/data/ghcn/daily/by_year/
+Years 1763-2023
