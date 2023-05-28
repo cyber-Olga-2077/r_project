@@ -1,2 +1,5 @@
-/Data/*
-!/Data/stations.csv
+/Client/Data/*
+!/Client/Data/stations.csv
+/Server/Data/*
+!/Server/Data/.gitkeep
+.Rhistory
