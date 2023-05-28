@@ -10,5 +10,11 @@ if(!require(openssl)) {
 
 setwd("~/r_test/Server")
 
-pr <- plumb("file_controller.R")
+source("../Common/parse_env.R")
+
+env <- parse_env()
+
+api_key <- env$value[env$key == "TOKEN"]
+
+pr <- plumb("controllers/file_controller.R")
 pr$run(port=8000)

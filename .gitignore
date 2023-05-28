@@ -4,7 +4,11 @@
 !/Client/Data/raw/.gitkeep
 /Client/Data/processed/*.csv.gz
 !/Client/Data/processed/.gitkeep
-/Server/Data/*
-!/Server/Data/.gitkeep
+/Server/Data/*.csv.gz
+!/Server/Data/stations.csv
+/Server/Data/raw/*.csv.gz
+!/Server/Data/raw/.gitkeep
+/Server/Data/processed/*.csv.gz
+!/Server/Data/processed/.gitkeep
 .Rhistory
 .env
