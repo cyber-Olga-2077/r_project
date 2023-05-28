@@ -24,7 +24,7 @@ function(req, res, filename) {
 #* @param filename The name of the file to send
 #* @serializer text
 #* parser none
-#* @head /file/raw
+#* @head /file/processed
 function(req, res, filename) {
   authentication <- req$HTTP_API_KEY
 
