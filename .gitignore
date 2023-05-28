@@ -1,5 +1,9 @@
-/Client/Data/*
+/Client/Data/*.csv.gz
 !/Client/Data/stations.csv
+/Client/Data/raw/*.csv.gz
+!/Client/Data/raw/.gitkeep
+/Client/Data/processed/*.csv.gz
+!/Client/Data/processed/.gitkeep
 /Server/Data/*
 !/Server/Data/.gitkeep
 .Rhistory
