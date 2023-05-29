@@ -27,17 +27,6 @@ message(paste0("Starting preprocessing for years in range: ", config$Whole_range
 
 critical_error <- FALSE
 
-for (year in seq(2003,2021,1)) {
-    message(paste0("Uploading raw data for year ", year, " to remote server..."))
-    encoded <- base64_encode(readBin(paste0("Data/raw/",year,".csv.gz"), "raw", file.size(paste0("Data/raw/",year,".csv.gz"))))
-    result <- httr::POST(url = paste0(config$Remote_weather_raw_upload, "?filename=", year), add_headers("api-key" = api_key, "Content-Type" = "text/plain"), body = encoded)
-    if(result$status_code == 204) {
-        message(paste0("Raw data for year ", year, " has been uploaded to remote server."))
-    } else {
-        message(paste0("Raw data for year ", year, " has not been uploaded to remote server."))
-    }
-}
-
 for (year in config$Whole_range_years){
     message(paste0("Processing year: ", year, "."))
 
@@ -126,7 +115,6 @@ for (year in config$Whole_range_years){
                 message(paste0("Raw data for year ", year, " has been downloaded, saving and processing."))
                 writeBin(object = fileData, con = paste0(getwd(), "/Data/raw/", year, ".csv.gz"))
                 if(!is.null(config$Remote_weather_raw_upload)){
-                    year <- 2022
                     message(paste0("Uploading raw data for year ", year, " to remote server..."))
                     encoded <- base64_encode(readBin(paste0("Data/raw/",year,".csv.gz"), "raw", file.size(paste0("Data/raw/",year,".csv.gz"))))
                     result <- httr::POST(url = paste0(config$Remote_weather_raw_upload, "?filename=", year), add_headers("api-key" = api_key, "Content-Type" = "text/plain"), body = encoded)
