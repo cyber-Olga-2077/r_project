@@ -8,9 +8,4 @@ filter_table <- function(input_data){
   data <- select(data, -BI, -Name)
   colnames(data) <- c("WeatherStationID", "Date", "MeasurementType", "MeasurementValue", "Latitude", "Longitude", "Elevation", "WeatherStationName")
   data <- filter(data, WeatherStationName != "")
-  
 }
-
-# base_data <- read.csv("Data/raw/1931.csv.gz", header = FALSE)
-
-# write.csv(data, file=gzfile("Data/processed/1931.csv.gz"))
