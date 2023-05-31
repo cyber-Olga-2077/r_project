@@ -1,24 +1,15 @@
-load_config <- function(){
-  setwd("~/r_project/Client")
-  
-  Config <- read.delim("config.txt", sep = "", header = FALSE)
+load_config <- function() {
+    setwd("~/r_project/Client")
 
-  Remote_weather_raw_download <- Config[Config$V1 == "URL_remote_raw_GET",]$V2
-  Remote_weather_raw_upload <- Config[Config$V1 == "URL_remote_raw_POST",]$V2
-  Remote_weather_processed_download <- Config[Config$V1 == "URL_remote_processed_GET",]$V2
-  Remote_weather_processed_upload <- Config[Config$V1 == "URL_remote_processed_POST",]$V2
-  Source_weather_ncei <- Config[Config$V1 == "URL_ncei_GET",]$V2
+    Config <- read.delim("config.txt", sep = "", header = FALSE)
 
-  Years_range <- Config[Config$V1 == "Years",]$V2
-  Start_year <- sapply(strsplit(Years_range, split = "-"), `[`, 1)
-  End_year <- sapply(strsplit(Years_range, split = "-"), `[`, 2)
+    GET_weather_stations_inventory <- Config[Config$V1 == "GET_weather_stations_inventory",]$V2
+    GET_weather_stations_directory <- Config[Config$V1 == "GET_weather_stations_directory",]$V2
 
-  Whole_range_years <- seq(Start_year, End_year, 1)
-
-  return(list(Remote_weather_raw_download = Remote_weather_raw_download,
-           Remote_weather_raw_upload = Remote_weather_raw_upload,
-           Remote_weather_processed_download = Remote_weather_processed_download,
-           Remote_weather_processed_upload = Remote_weather_processed_upload,
-           Source_weather_ncei = Source_weather_ncei,
-           Whole_range_years = Whole_range_years))
+    return (
+        list (
+            GET_weather_stations_inventory = GET_weather_stations_inventory,
+            GET_weather_stations_directory = GET_weather_stations_directory
+        )
+    )
 }

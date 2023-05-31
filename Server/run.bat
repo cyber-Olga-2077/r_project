@@ -1,1 +1,0 @@
-Rscript server.R

@@ -1,6 +1,2 @@
-URL_remote_raw_GET forecast.olgakrzyczkowska.pl/file/raw
-URL_remote_raw_POST forecast.olgakrzyczkowska.pl/file/raw 
-URL_remote_processed_GET forecast.olgakrzyczkowska.pl/file/processed
-URL_remote_processed_POST forecast.olgakrzyczkowska.pl/file/processed
-URL_ncei_GET https://www.ncei.noaa.gov/pub/data/ghcn/daily/by_year/
-Years 1763-2023
+GET_weather_stations_inventory https://www.ncei.noaa.gov/pub/data/ghcn/daily/ghcnd-inventory.txt
+GET_weather_stations_directory https://www.ncei.noaa.gov/pub/data/ghcn/daily/by_station/
