@@ -1,0 +1,143 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+```{r}
+# install packages
+install.packages("plotly")
+install.packages("Hmisc")
+
+```
+
+## Sprawdzanie wartości pustych
+
+```{r}
+
+for (i in 1:length(analysed_data)) {
+  print(i)
+  measurements_to_calculate <- analysed_data[[i]][["Measurements"]][["MeasurementValue"]]
+  # zmiana formatu temperatury
+  measurements <- ifelse(is.na(measurements_to_calculate), NA, measurements_to_calculate * 0.1)
+  id_stat <- analysed_data[[i]][["Informations"]][["Station_ID"]]
+  
+   # sprawdzanie ile jest wartości pustych 
+  check_if_empty <- sum(is.na(measurements))
+  cat("Element", id_stat , ": Liczba pustych =", check_if_empty, "\n")
+  
+  # Zamiana wartości w analysed_data na wartości obliczone w measurements
+  analysed_data[[i]][["Measurements"]][["MeasurementValue"]] <- measurements
+}
+
+
+ 
+```
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+
+## Rysowanie wykresów przedstawiających temperaturę na danej stacji
+
+```{r}
+# rysowanie wykresów
+library(plotly)
+
+for (i in 1:length(analysed_data)) {
+  x <- analysed_data[[i]][["Measurements"]][["MeasurementValue"]]
+  y <- analysed_data[[i]][["Measurements"]][["Year"]]
+
+  id_stat <- analysed_data[[i]][["Informations"]][["Station_ID"]]
+  region_stat <- analysed_data[[i]][["Informations"]][["Region"]]
+  
+  df <- data.frame(temperature = x, year = y)
+  df <- df[order(df$year), ]
+  
+  # Zamiana pustych wartości na NA
+  df$temperature[is.na(df$temperature)] <- NA
+  
+  fig <- plot_ly(df, x = ~year, y = ~temperature, type = "scatter", mode = "lines") %>%
+    add_trace(data = subset(df, !is.na(temperature)), mode = "lines", line = list(color = "blue")) %>%
+    layout(xaxis = list(title = "Year"), yaxis = list(title = "Temperature (C)"),
+           title = paste("Temperature in", id_stat, "(", region_stat, ")"),
+           plot_bgcolor = '#e5ecf6', width = 900)
+  
+  print(fig)
+}
+```
+
+## Średnia roczna
+```{r}
+library(plotly)
+
+for (i in 1:length(analysed_data)) {
+  measurement_type <- analysed_data[[i]][["Measurements"]][["MeasurementType"]]
+  
+  if ("TMAX" %in% measurement_type) {
+    x <- analysed_data[[i]][["Measurements"]][["MeasurementValue"]]
+    y <- analysed_data[[i]][["Measurements"]][["Year"]]
+
+    id_stat <- analysed_data[[i]][["Informations"]][["Station_ID"]]
+    region_stat <- analysed_data[[i]][["Informations"]][["Region"]]
+
+    df <- data.frame(temperature = x, year = y)
+    df <- aggregate(temperature ~ year, data = df, FUN = mean)  # Agregacja przez średnią
+    df <- df[order(df$year), ]
+
+    # Zamiana pustych wartości na NA
+    df$temperature[is.na(df$temperature)] <- NA
+
+    fig <- plot_ly(df, x = ~year, y = ~temperature, type = "scatter", mode = "lines") %>%
+      add_trace(data = subset(df, !is.na(temperature)), mode = "lines", line = list(color = "blue"), connectgaps = FALSE) %>%
+      layout(xaxis = list(title = "Year"), yaxis = list(title = "Temperature (C)"),
+             title = paste("Temperature in", id_stat, "(", region_stat, ")"),
+             plot_bgcolor = '#e5ecf6', width = 900)
+
+    print(fig)
+  }
+}
+df
+```
+
+# TESTY
+```{r}
+library(plotly)
+
+for (i in 1:length(analysed_data)) {
+  measurement_type <- analysed_data[[i]][["Measurements"]][["MeasurementType"]]
+  
+  if ("TMAX" %in% measurement_type) {
+    x <- analysed_data[[i]][["Measurements"]][["MeasurementValue"]]
+    y <- analysed_data[[i]][["Measurements"]][["Year"]]
+
+    id_stat <- analysed_data[[i]][["Informations"]][["Station_ID"]]
+    region_stat <- analysed_data[[i]][["Informations"]][["Region"]]
+
+    df <- data.frame(temperature = x, year = y)
+    df <- df[order(df$year), ]
+
+    # Zamiana pustych wartości na NA
+    #df$temperature[is.na(df$temperature)] <- NA
+
+    fig <- plot_ly(df, x = ~year, y = ~temperature, type = "scatter", mode = "lines") %>%
+      #add_trace(data = subset(df, !is.na(temperature)), mode = "lines", line = list(color = "blue"), connectgaps = FALSE) %>%
+      layout(xaxis = list(title = "Year"), yaxis = list(title = "Temperature (C)"),
+             title = paste("Temperature in", id_stat, "(", region_stat, ")"),
+             plot_bgcolor = '#e5ecf6', width = 900)
+
+    print(fig)
+  }
+}
+ 
+df
+```
+
+
+
+
