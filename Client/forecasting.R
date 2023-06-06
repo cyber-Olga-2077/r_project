@@ -25,7 +25,7 @@ forecast_data <- function (stations) {
         station_ID <- stations[[i]]$Informations$Station_ID
 
         message(paste0("Creating time series for highest temperatures from station ", station_ID, "..."))
-        TMAX_measurements <- measurements[measurements$MeasurementType == "TMIN",]
+        TMAX_measurements <- measurements[measurements$MeasurementType == "TMAX",]
         TMAX_arranged_measurements <- arrange(TMAX_measurements, Year, Month)
         TMAX_time_series <- ts(TMAX_arranged_measurements$MeasurementValue, start = c(TMAX_arranged_measurements$Year[1], TMAX_arranged_measurements$Month[1]), frequency = 12)
 
