@@ -5,9 +5,10 @@ if(!require(dplyr)) {
 
 filter_table <- function(input_data){
     data <- filter(input_data, is.element(V3, c("TMIN", "TMAX")))
-    data <- select(data, V1, V2, V3, V4)
 
-    colnames(data) <- c("WeatherStationID", "Date", "MeasurementType", "MeasurementValue")
+    colnames(data) <- c("WeatherStationID", "Date", "MeasurementType", "MeasurementValue", "MeasurementFlag", "QualityFlag", "SourceFlag", "ObservationTime")
+    data <- filter(data, QualityFlag == "")
+
     return(data)
 }
 
@@ -20,6 +21,8 @@ format_weather_station_dates <- function (data) {
 }
 
 aggregate_weather_data <- function (data) {
+    data$MeasurementValue <- data$MeasurementValue / 10
+
     data <- aggregate(data$MeasurementValue, by = list(data$Year, data$Month, data$MeasurementType), FUN = mean)
     colnames(data) <- c("Year", "Month", "MeasurementType", "MeasurementValue")
     data <- arrange(data, Year, Month)

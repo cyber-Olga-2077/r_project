@@ -10,5 +10,7 @@
 !/Server/data/raw/.gitkeep
 /Server/data/processed/*.csv.gz
 !/Server/data/processed/.gitkeep
+/Client/analysed_data.rds
+/Client/plots.rds
 .Rhistory
 .env
