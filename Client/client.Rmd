@@ -2,17 +2,24 @@
 title: "Weather forecasts"
 output: html_notebook
 ---
+```{r}
+saveRDS(analysed_data, file = "analysed_data.rds")
+```
+
+
 
 Set Working Directory, Load Config and Source Files
 ```{r}
-    setwd("~/r_project/Client")
 
+    #setwd("~/r_project/Client")
+    setwd("C:/Users/Karolina/Desktop/semestr VII/Programowanie w R/Projekt/r_project/Client/Rprojekt")
     source(file = "config.R")
     source(file = "arrangement.R")
     source(file = "geolocation.R")
     source(file = "forecasting.R")
     source(file = "preparations.R")
     source(file = "plots.R")
+    source(file = "map.R")
 
     config <- load_config()
 ```
@@ -52,4 +59,22 @@ Print Monthly Plots
         print(plots$Forecasted$Monthly[[month]]$TMAX)
         print(plots$Forecasted$Monthly[[month]]$TMIN)
     }
+```
+
+
+
+World map
+```{r}
+# Wybrany miesiąc i rok
+selected_month <-4
+selected_year <- 2020
+# Przetwarzanie danych na listy
+lon <- lapply(analysed_data, function(x) x$Informations$Lon)
+lat <- lapply(analysed_data, function(x) x$Informations$Lat)
+station_ID <- lapply(analysed_data, function(x) x$Informations$Station_ID)
+temperature <- lapply(analysed_data, function(x) x$Measurements$MeasurementValue)
+
+# Rysowanie mapy
+world_map <- createWorldMap(lat, lon, station_ID, temperature)
+world_map
 ```
