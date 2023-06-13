@@ -12,5 +12,6 @@
 !/Server/data/processed/.gitkeep
 /Client/analysed_data.rds
 /Client/plots.rds
+/Client/maps.rds
 .Rhistory
 .env

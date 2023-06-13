@@ -1,58 +1,91 @@
-
-
-# Tworzenie pustego data frame
-combined_data <- data.frame(lon = numeric(),
-                            lat = numeric(),
-                            temperature = numeric(),
-                            station_ID = character())
-
-# Pętla iterująca po danych stacji
-for (i in seq_along(analysed_data)) {
-  Forecast <- analysed_data[[i]]$Measurements$MeasurementValue
-  lon <- analysed_data[[i]]$Informations$Lon
-  lat <- analysed_data[[i]]$Informations$Lat
-  month <- analysed_data[[i]]$Measurements$Month
-  year <- analysed_data[[i]]$Measurements$Year
-  
-  # Dodawanie danych dla wszystkich stacji
-  combined_data <- rbind(combined_data,
-                         data.frame(lon = lon,
-                                    lat = lat,
-                                    temperature = Forecast,
-                                    station_ID = analysed_data[[i]]$Informations$Station_ID))
+if(!require(dplyr)) {
+    install.packages("dplyr")
+    library(dplyr)
 }
 
-createWorldMap <- function(lon, lat, station_ID, temperature) {
-  # Tworzenie danych do mapy
-  map_data <- data.frame(lon = rep(unlist(lon), lengths(temperature)),
-                         lat = rep(unlist(lat), lengths(temperature)),
-                         station_ID = rep(unlist(station_ID), lengths(temperature)),
-                         temperature = unlist(temperature))
-  
-  # Rysowanie mapy świata
-  map <- plot_geo(
-    map_data,
-    locationmode = "country names"
-  ) %>%
-    add_markers(
-      x = ~lon,
-      y = ~lat,
-      color = ~temperature,
-      colors = "RdBu",
-      colorbar = list(title = "Temperature"),
-      hoverinfo = "text",
-      text = ~paste("Station ID:", station_ID, "<br>Temperature:", temperature)
-    ) %>%
-    layout(
-      title = paste("Temperature world map for", selected_month, "/", selected_year),
-      geo = list(
-        showframe = FALSE,
-        showcoastlines = TRUE,
-        projection = list(type = "natural earth")
-      )
+if(!require(plotly)) {
+    install.packages("plotly")
+    library(plotly)
+}
+
+createWorldMap <- function(stations) {
+    TMIN_map_data <- data.frame()
+    TMAX_map_data <- data.frame()
+
+    for (station in stations) {
+        TMIN_measurements <- station$Measurements[station$Measurements$MeasurementType == "TMIN", ]
+        TMAX_measurements <- station$Measurements[station$Measurements$MeasurementType == "TMAX", ]
+
+        TMIN_station_map_data <- data.frame(
+            lon = station$Informations$Lon,
+            lat = station$Informations$Lat,
+            station_ID = station$Informations$Station_ID,
+            Temperature = TMIN_measurements$MeasurementValue,
+            Date = paste0(TMIN_measurements$Year, "-", TMIN_measurements$Month)
+        )
+
+        TMAX_station_map_data <- data.frame(
+            lon = station$Informations$Lon,
+            lat = station$Informations$Lat,
+            station_ID = station$Informations$Station_ID,
+            Temperature = TMAX_measurements$MeasurementValue,
+            Date = paste0(TMAX_measurements$Year, "-", TMAX_measurements$Month)
+        )
+
+        TMIN_map_data <- rbind(TMIN_map_data, TMIN_station_map_data)
+        TMAX_map_data <- rbind(TMAX_map_data, TMAX_station_map_data)
+    }
+
+    TMIN_map <- plot_geo(locationmode = "country names")
+    TMIN_map <- add_markers(
+        data = TMIN_map_data,
+        p = TMIN_map,
+        x = ~lat,
+        y = ~lon,
+        color = ~Temperature,
+        colors = "YlOrRd",
+        hoverinfo = "text",
+        text = ~paste("Station ID:", station_ID, "<br>Temperature:", Temperature),
+        frame = ~Date,
+        size = 2
     )
-  
-  return(map)
+    TMIN_map <-layout(
+        p = TMIN_map,
+        title = paste("Minimum average monthly temperature"),
+        geo = list(
+            showframe = TRUE,
+            showcoastlines = TRUE,
+            projection = list(type = "natural earth")
+        )
+    )
+
+    TMAX_map <- plot_geo(locationmode = "country names")
+    TMAX_map <- add_markers(
+        data = TMAX_map_data,
+        p = TMAX_map,
+        x = ~lat,
+        y = ~lon,
+        color = ~Temperature,
+        colors = "YlOrRd",
+        hoverinfo = "text",
+        text = ~paste("Station ID:", station_ID, "<br>Temperature:", Temperature),
+        frame = ~Date,
+        size = 2
+    )
+    TMAX_map <-layout(
+        p = TMAX_map,
+        title = paste("Maximum average monthly temperature"),
+        geo = list(
+            showframe = TRUE,
+            showcoastlines = TRUE,
+            projection = list(type = "natural earth")
+        )
+    )
+
+    return(list(
+        TMIN = TMIN_map,
+        TMAX = TMAX_map
+    ))
 }
 
 
