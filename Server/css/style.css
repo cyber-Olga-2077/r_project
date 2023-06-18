@@ -13,6 +13,10 @@ body {
 
 .main {
     flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2rem;
 }
 
 .footer {
@@ -94,4 +98,17 @@ body {
 
 .collapsible__content {
     display: block;
+}
+
+.wideBoi {
+    width: 100%;
+}
+
+.justified {
+    text-align: justify;
+}
+
+.siteTitle {
+    font-size: 2rem;
+    margin: 1rem 0;
 }
