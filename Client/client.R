@@ -7,9 +7,16 @@ source(file = "forecasting.R")
 source(file = "preparations.R")
 source(file = "plots.R")
 source(file = "map.R")
+source(file = "saving.R")
+source(file = "compressing.R")
+source(file = "uploading.R")
 
 config <- load_config()
 
+
+source("../Common/parse_env.R")
+env <- parse_env()
+api_key <- env$value[env$key == "TOKEN"]
 
 # Try to load data from file, if not available, download and prepare data
 if (file.exists("analysed_data.rds")) {
@@ -39,18 +46,20 @@ if (file.exists("maps.rds")) {
     saveRDS(maps, file = "maps.rds")
 }
 
+# Save plots and maps to files
+createDirectory()
+saveYearlyPlots(plots$Historical$Yearly)
+saveMonthlyPlots(plots$Forecasted$Monthly)
+saveMaps(maps)
 
-# Print Yearly Plots
-print(plots$Historical$Yearly$TMAX)
-print(plots$Historical$Yearly$TMIN)
+# Compress plots and maps
+removeLibraryFiles()
+compressedPlots <- compressPlots()
+compressedStationList <- compressStationList(analysed_data)
 
+# Send plots and maps to server
+message("Sending plots to server...")
+uploadDataToServer(config$POST_plots, compressedPlots)
 
-# Print Monthly Plots
-for (month in seq(1, length(plots$Forecasted$Monthly))) {
-    print(plots$Forecasted$Monthly[[month]]$TMAX)
-    print(plots$Forecasted$Monthly[[month]]$TMIN)
-}
-
-# Print Maps
-print(maps$TMAX)
-print(maps$TMIN)
+message("Sending station list to server...")
+uploadDataToServer(config$POST_station_list, compressedStationList)

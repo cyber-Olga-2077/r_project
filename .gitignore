@@ -15,3 +15,5 @@
 /Client/maps.rds
 .Rhistory
 .env
+/Client/plots/*
+/Server/data/*

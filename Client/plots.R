@@ -101,6 +101,7 @@ create_plots <- function (stations) {
                 message(paste0("Creating monthly plots for ", station$Informations$Station_ID), "...")
 
                 list(
+                    Name = station$Informations$Station_ID,
                     TMAX = createForecastPlot(station$Forecast$TMAX[[station$UsedForecastingMethod]], name = paste0("Forecasted maximum average monthly temperature for ", station$Informations$Station_ID, " - ", station$Informations$Region)),
                     TMIN = createForecastPlot(station$Forecast$TMIN[[station$UsedForecastingMethod]], name = paste0("Forecasted minimum average monthly temperature for", station$Informations$Station_ID, " - ", station$Informations$Region))
                 )

@@ -1,2 +1,4 @@
 GET_weather_stations_inventory https://www.ncei.noaa.gov/pub/data/ghcn/daily/ghcnd-inventory.txt
 GET_weather_stations_directory https://www.ncei.noaa.gov/pub/data/ghcn/daily/by_station/
+POST_plots http://forecast.olgakrzyczkowska.pl/plots
+POST_station_list http://forecast.olgakrzyczkowska.pl/stations
