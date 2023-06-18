@@ -23,7 +23,7 @@ function (req, res) {
     if (is.null(station_list)) {
         message <- paste(readLines(paste0(getwd(), "/../templates/missing_data.html")), collapse = "\n")
         document <- template(document, list(
-            CONTENT = message,
+            CONTENT = message
         ))
     } else {
         #MAPS SECTION
